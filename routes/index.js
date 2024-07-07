@@ -1,18 +1,13 @@
 const express = require("express");
-const axios = require("axios");
 const mongoose = require("mongoose");
 require("dotenv").config();
 const cors = require("cors");
 const usersRouter = require("./usuarios");
-
 const app = express();
 const router = express.Router();
 
-const apiRickMorty = "https://rickandmortyapi.com/api/character/";
-
 // Conexión a MongoDB
-mongoose
-  .connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("Conectado a MongoDB");
   })
@@ -21,7 +16,7 @@ mongoose
   });
 
 // Middleware
-// Configuración de rutas\
+// Configuración de rutas
 app.use(cors());
 app.use(express.json());
 app.use("/api", router, usersRouter);

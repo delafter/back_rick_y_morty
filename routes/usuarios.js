@@ -8,17 +8,31 @@ const router = express.Router();
 //crear un nuevo usuario
 
 router.post("/usuarios/signup", (req, res) => {
-  const user = userSchema(req.body);
-  user
-    .save()
-    .then((data) => res.json({ message: "Usuario creado", data: data }))
-    .catch((error) => res.json({ message: error.message }));
+  const { email} = req.body;
+
+  userSchema.findOne({ email: email }).then((yaExiste) => {
+    if (yaExiste) {
+      res.json({ message: "Usuario ya existe" }), 409;
+    } else {
+      
+      const verifyEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/; //expresion regular para validar email
+      if (!verifyEmail.test(email)) {
+        return res.json({ message: "Email no valido" }), 400;
+      }
+      const user = userSchema(req.body);
+
+      user.save()
+        .then((data) => res.json({ message: "Usuario creado", data: data }))
+        .catch((error) => res.json({ message: error.message }));
+    }
+  });
 });
 
 // loguear un usuario
 
 router.post("/usuarios/login", (req, res) => {
-  userSchema.findOne({ email: req.body.email, password: req.body.password })
+  userSchema
+    .findOne({ email: req.body.email, password: req.body.password })
     .then((data) => {
       if (data) {
         const userForToken = {
@@ -28,14 +42,16 @@ router.post("/usuarios/login", (req, res) => {
         const token = jwt.sign({ userForToken }, process.env.JWT_SECRET_KEY, {
           expiresIn: "1h",
         });
-        res.json({ message: "Usuario logueado", token, data: data});
+        res.json({ message: "Usuario logueado", token, data: data });
       } else {
         res.json({ message: "Usuario no encontrado" }), 404;
       }
     })
-    .catch((error) =>{
-      console.log(token)
-       res.json({ message: error.message })}), 500;
+    .catch((error) => {
+      console.log(token);
+      res.json({ message: error.message });
+    }),
+    500;
 });
 
 //obtener unsuario por su id
