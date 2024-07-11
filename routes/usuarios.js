@@ -28,7 +28,7 @@ router.post("/usuarios/signup", (req, res) => {
   });
 });
 
-
+  
 // loguear un usuario
 
 router.post("/usuarios/login", (req, res) => {
