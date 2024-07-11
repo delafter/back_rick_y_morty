@@ -8,7 +8,7 @@ const router = express.Router();
 //crear un nuevo usuario
 
 router.post("/usuarios/signup", (req, res) => {
-  const { email} = req.body;
+  const { email } = req.body;
 
   userSchema.findOne({ email: email }).then((yaExiste) => {
     if (yaExiste) {
@@ -27,6 +27,7 @@ router.post("/usuarios/signup", (req, res) => {
     }
   });
 });
+
 
 // loguear un usuario
 

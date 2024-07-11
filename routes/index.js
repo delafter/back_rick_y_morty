@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const cors = require("cors");
 const usersRouter = require("./usuarios");
+const favoritesRouter = require("./favoritos");
 const app = express();
 const router = express.Router();
 
@@ -19,7 +20,7 @@ mongoose.connect(process.env.MONGODB_URI)
 // Configuración de rutas
 app.use(cors());
 app.use(express.json());
-app.use("/api", router, usersRouter);
+app.use("/api", router, usersRouter, favoritesRouter);
 
 // Ruta de inicio
 app.get("/", (req, res) => {
