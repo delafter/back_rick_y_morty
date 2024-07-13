@@ -1,15 +1,23 @@
 const express = require("express");
 const router = express.Router();
-const favoritesSchema = require("../models/favorites");
+const Favorites = require("../models/favorites");
 
-// post para guardar los personajes favoritos de la api de rick and morty
+
 router.post("/favoritos/", (req, res) => {
-  const favorites = favoritesSchema(req.body);
+  const favorites = new Favorites(req.body);
 
   favorites.save()
     .then((data) => res.json({ message: "Personaje guardado", data: data }))
-    .catch((error) =>
-      res.json({ message: "Ya esta en la base de datos", error: error.message })
-    );
+    .catch((error) =>res.json({  error: error.message }));
+});
+
+
+// get para obtener los personajes favoritos de la api de rick and morty
+
+router.get("/favoritos/", (req, res) => {
+
+  Favorites.find() 
+    .then((data) => res.json({ data }))
+    .catch((error) => res.json({ message: "Error", error: error.message }));
 });
 module.exports = router;
