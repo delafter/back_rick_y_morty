@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 
+
 //crear un nuevo usuario
 
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: false,
@@ -23,9 +24,7 @@ const userSchema = mongoose.Schema({
     required: true,
   },
 
-  
+ 
 });
-
-//obtener un usuario por su id
 
 module.exports = mongoose.model("User", userSchema);
